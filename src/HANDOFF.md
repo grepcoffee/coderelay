@@ -2,47 +2,52 @@
 
 ## Current Goal
 
-State the exact task the next agent should continue.
+Add a Codex Stop hook that mirrors the existing Claude Code handoff reminder.
 
 ## What Was Just Finished
 
-- Item completed recently
-- Another completed item
+- Added repo-local Codex hook configuration in `.codex/hooks.json`.
+- Enabled the experimental Codex hooks feature for this repo in `.codex/config.toml`.
+- Added `.codex/hooks/stop_handoff_check.sh`, which checks whether `HANDOFF.md` has been updated in the last 5 minutes and asks Codex to continue if it is stale.
+- Verified the hook JSON parses and the script emits the expected Codex Stop-hook continuation JSON when the handoff is stale.
 
 ## What Is In Progress
 
-- Work that has started but is not done
+- No coding work is currently in progress.
 
 ## Next 3 Steps
 
-1. First concrete step
-2. Second concrete step
-3. Third concrete step
+1. Start a fresh Codex session in this repo and confirm the Stop hook runs automatically at session end.
+2. Decide whether to document the Claude/Codex hook setup in `README.md`.
+3. Commit `.claude/`, `.codex/`, and this updated handoff when ready.
 
 ## Important Files
 
-- `path/to/file`
-- `path/to/another-file`
+- `.claude/settings.json`
+- `.codex/config.toml`
+- `.codex/hooks.json`
+- `.codex/hooks/stop_handoff_check.sh`
+- `src/HANDOFF.md`
 
 ## Commands To Run
 
-- `npm run dev`
-- `npm test`
-- `npm run lint`
+- `python3 -m json.tool .codex/hooks.json`
+- `/bin/sh .codex/hooks/stop_handoff_check.sh`
+- `codex features list`
 
 ## Known Issues
 
-- Bug, risk, or uncertainty
+- Codex hooks are experimental per OpenAI docs and are currently disabled on Windows.
+- The current shell hook is intentionally portable and is invoked through `/bin/sh`, so executable file mode is not required.
 
 ## Constraints
 
-- Preserve current architecture
-- Avoid unrelated refactors
-- Follow existing styling patterns
+- Keep the hook behavior lightweight and repo-local.
+- Do not edit global `~/.codex/config.toml` unless explicitly requested.
 
 ## Notes For The Next Agent
 
-Write the shortest possible briefing that still lets someone pick up the work without rereading the entire conversation.
+The Codex hook mirrors the Claude setup: when Codex reaches `Stop`, it searches from the git root for `HANDOFF.md`; if the file exists and is older than 300 seconds, it returns `{"decision":"block","reason":"..."}` so Codex continues with a prompt to update the handoff.
 
 ## Fallback Model
 

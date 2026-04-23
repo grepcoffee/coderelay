@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh \"$(git rev-parse --show-toplevel)/.codex/hooks/stop_handoff_check.sh\"",
+            "statusMessage": "Checking HANDOFF.md freshness",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

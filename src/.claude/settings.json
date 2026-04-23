@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "asyncRewake": true,
+            "rewakeSummary": "HANDOFF.md needs updating before session ends",
+            "rewakeMessage": "HANDOFF.md hasn't been updated in this session. Please update it now with: current goal, what was just completed, what's in progress, next 3 steps, important files, and any blockers or risks. Keep it brief and operational — just enough for the next agent to pick up without rereading the conversation.",
+            "command": "HANDOFF=$(find \"$PWD\" -maxdepth 3 -name 'HANDOFF.md' 2>/dev/null | head -1); [ -z \"$HANDOFF\" ] && exit 0; LAST=$(stat -f %m \"$HANDOFF\" 2>/dev/null || stat -c %Y \"$HANDOFF\" 2>/dev/null); NOW=$(date +%s); [ $((NOW - LAST)) -gt 300 ] && exit 2; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

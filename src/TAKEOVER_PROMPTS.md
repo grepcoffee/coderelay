@@ -1,148 +1,133 @@
 # Takeover Prompts
 
-These are ready-to-paste prompts for handing work between Codex, Claude Code, and a local Ollama fallback model.
+Ready-to-paste prompts for handing work between agents.
+
+The prompts are intentionally lean. Research shows that loading agents with broad context files increases inference cost and reduces task success. Each prompt loads only what the agent cannot derive from the code itself.
+
+---
 
 ## Universal Takeover Prompt
 
 ```text
-You are taking over this app build.
+You are taking over this project from another coding agent.
 
-Read these first:
-- README.md
-- PROJECT_CONTEXT.md
-- TASKS.md
-- HANDOFF.md
-- DECISIONS.md
+Start here:
+1. Read src/HANDOFF.md
+2. Read src/TASKS.md
+3. Inspect the files listed under "Important Files" in HANDOFF.md
 
-Then inspect the files listed in HANDOFF.md.
+Only read src/DECISIONS.md if your work touches existing architecture decisions.
+Only read src/PROJECT_CONTEXT.md if you need the run/test commands and cannot find them elsewhere.
 
-Current objective:
-[paste the current objective]
+Do not read files speculatively — inspect what HANDOFF.md points you to, then proceed.
 
-Constraints:
+Current objective: [paste from HANDOFF.md]
+
+Rules:
+- Make targeted changes only
 - Do not refactor unrelated code
-- Prefer minimal, targeted changes
-- Preserve the existing style and architecture unless the handoff says otherwise
-- Update HANDOFF.md before stopping
-
-Before coding:
-1. Summarize your understanding
-2. List the next concrete steps
-3. Then implement them
+- Preserve existing style and architecture unless the handoff says otherwise
+- Before coding: confirm your understanding and list your next steps
+- Update src/HANDOFF.md before stopping
 ```
 
-## Prompt To End A Session Cleanly
+---
+
+## End-of-Session Prompt
+
+Use this to close out a session cleanly.
 
 ```text
-Before stopping, update HANDOFF.md with:
-- what you changed
-- what remains
-- known issues or risks
-- exact next steps
-- the files the next agent should inspect first
+Before stopping, update src/HANDOFF.md with:
+- current goal (one sentence)
+- what is still in progress
+- next 3 concrete steps
+- files the next agent should inspect first
+- any blockers or open risks
 
-Also give me:
-- a short summary of the work completed
-- any failing tests or blockers
-- a ready-to-paste takeover prompt for the next LLM
+Keep it brief. Do not summarize what you did — that is what git log is for.
 ```
+
+---
 
 ## Codex Takeover Prompt
 
 ```text
 Take over this project from another coding agent.
 
-Start by reading:
-- README.md
-- PROJECT_CONTEXT.md
-- TASKS.md
-- HANDOFF.md
-- DECISIONS.md
+1. Read src/HANDOFF.md
+2. Read src/TASKS.md
+3. Inspect the files listed under "Important Files" in HANDOFF.md
 
-Then inspect the files named in HANDOFF.md and continue the current goal.
+Only consult src/DECISIONS.md if your changes touch existing architecture.
 
 Rules:
 - Make targeted edits only
-- Run relevant verification if available
-- Do not undo unrelated existing changes
-- Update HANDOFF.md before you stop
+- Run verification if available
+- Do not undo unrelated changes
+- Update src/HANDOFF.md before stopping
 ```
+
+---
 
 ## Claude Code Takeover Prompt
 
 ```text
 Take over this project from another coding agent.
 
-Read:
-- README.md
-- PROJECT_CONTEXT.md
-- TASKS.md
-- HANDOFF.md
-- DECISIONS.md
+1. Read src/HANDOFF.md
+2. Read src/TASKS.md
+3. Inspect the files listed under "Important Files" in HANDOFF.md
 
-Then review the files listed in HANDOFF.md and continue the current objective.
+Only consult src/DECISIONS.md if your changes touch existing architecture.
 
-Please:
-- summarize your understanding first
-- flag any architectural or product risks early
-- make targeted changes
-- update HANDOFF.md before stopping
+Before coding:
+- Confirm your understanding of the current goal
+- Flag any risks or ambiguities early
+- List your next concrete steps
+
+Update src/HANDOFF.md before stopping.
 ```
 
-## Local Ollama Qwen Coder Fallback Prompt
+---
 
-Use this only if both Codex and Claude Code are unavailable or out of tokens.
+## Local Ollama Fallback Prompt
+
+Use only if both Codex and Claude Code are unavailable or out of tokens.
 
 ```text
 You are taking over this project as the fallback coding model.
 
-Read these files first:
-- README.md
-- PROJECT_CONTEXT.md
-- TASKS.md
-- HANDOFF.md
-- DECISIONS.md
-
-Then inspect the files listed in HANDOFF.md.
-
-Current objective:
-[paste the current objective]
+1. Read src/HANDOFF.md
+2. Read src/TASKS.md
+3. Inspect the files listed under "Important Files" in HANDOFF.md
 
 Rules:
 - Make the smallest reasonable change set
 - Do not refactor unrelated code
-- Preserve the existing style and structure unless the handoff says otherwise
-- Update HANDOFF.md before stopping
-
-Before coding:
-1. Summarize your understanding
-2. List the next concrete steps
-3. Then implement them
+- Preserve existing style and structure
+- Before coding: summarize your understanding and list next steps
+- Update src/HANDOFF.md before stopping
 ```
 
-## Ollama Run Hint
-
-If you use Ollama from a terminal, pair the model with the handoff files rather than relying on memory from earlier sessions. The important part is not the exact command but that the model receives the current repo context and updates `HANDOFF.md` before you switch away from it.
+---
 
 ## Review Prompt
 
-Use this when one agent has implemented something and you want the other to review it.
+Use when one agent has implemented something and you want the other to review it.
 
 ```text
 Review the current changes in this repo.
 
 Read:
-- PROJECT_CONTEXT.md
-- TASKS.md
-- HANDOFF.md
-- DECISIONS.md
+- src/HANDOFF.md
+- src/DECISIONS.md
 
 Focus on:
-- bugs
-- regressions
-- missing tests
+- bugs and regressions
+- missing or broken tests
 - risky assumptions
-- inconsistencies with the stated constraints
+- inconsistencies with stated constraints
 
-Give findings first, then suggested fixes. Update HANDOFF.md with any important follow-up work.
+Give findings first, then suggested fixes. Update src/HANDOFF.md with any follow-up work.
 ```

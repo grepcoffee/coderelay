@@ -55,14 +55,15 @@ copy_file() {
 }
 
 # src/ context files
-copy_file "$CODERELAY_DIR/src/PROJECT_CONTEXT.md"  "$TARGET/src/PROJECT_CONTEXT.md"
-copy_file "$CODERELAY_DIR/src/TASKS.md"            "$TARGET/src/TASKS.md"
-copy_file "$CODERELAY_DIR/src/HANDOFF.md"          "$TARGET/src/HANDOFF.md"
-copy_file "$CODERELAY_DIR/src/DECISIONS.md"        "$TARGET/src/DECISIONS.md"
-copy_file "$CODERELAY_DIR/src/TAKEOVER_PROMPTS.md" "$TARGET/src/TAKEOVER_PROMPTS.md"
+copy_file "$CODERELAY_DIR/src/PROJECT_CONTEXT.md"   "$TARGET/src/PROJECT_CONTEXT.md"
+copy_file "$CODERELAY_DIR/src/TASKS.md"             "$TARGET/src/TASKS.md"
+copy_file "$CODERELAY_DIR/src/HANDOFF.md"           "$TARGET/src/HANDOFF.md"
+copy_file "$CODERELAY_DIR/src/DECISIONS.md"         "$TARGET/src/DECISIONS.md"
+copy_file "$CODERELAY_DIR/src/TAKEOVER_PROMPTS.md"  "$TARGET/src/TAKEOVER_PROMPTS.md"
 copy_file "$CODERELAY_DIR/src/SESSION_CHECKLIST.md" "$TARGET/src/SESSION_CHECKLIST.md"
 
-# Claude Code hook
+# Claude Code — CLAUDE.md (auto-read every session) and stop hook
+copy_file "$CODERELAY_DIR/src/CLAUDE.md"               "$TARGET/CLAUDE.md"
 copy_file "$CODERELAY_DIR/src/.claude/settings.json"   "$TARGET/.claude/settings.json"
 
 # Codex hook
